@@ -1,0 +1,19 @@
+{
+    "name": "restaurants_server",
+    "description": "NodeJS Session EXPRESS EJS app",
+    "author": "Wong Sze Man <s1118124@ouhk.edu.hk>, Chan Lok Ting <>",
+    "version": "0.0.1",
+    "dependencies": {
+        "express": "*", 
+        "ejs": "*",
+        "body-parser": "*",
+        "cookie-session": "*",
+        "express-session": "*",
+        "body-parser": "*",
+        "mongodb": "*",
+        "assert": "*",
+        "express-fileupload": "*"
+    },
+    "engine": "node >= 0.10.0",
+    "scripts": {"start": "node server"}
+}
