@@ -1,0 +1,12 @@
+<HTML><BODY>
+<H1>Restaurants</H1>
+<H2>User: userid</H2>
+<H3>Showing <%= c.length %> restaurants</h3>
+<!--p><a href=/shoppingcart>shopping cart</a></p-->
+<p><a href=/new>New</a></p>
+<ol>
+  <% c.forEach(function(cafe) { %>
+  <li><a href=/showdetails?id=<%= cafe.id %>><%= cafe.name %></a></li>
+  <% });                        %>
+</ol>
+</BODY></HTML>

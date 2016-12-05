@@ -1,0 +1,12 @@
+<HTML><BODY>
+<H1>Restaurants</H1>
+<H2>User: userid</H2>
+<H3>Restaurants which include the keyword %></h3>
+<!--p><a href=/shoppingcart>shopping cart</a></p-->
+
+<ol>
+  <% restaurants.forEach(function(r) { %>
+  <ul><a href=/details?id=<%= r._id %>><%= r.name %></a></ul>
+  <% });   %>
+ </ol>
+</BODY></HTML>

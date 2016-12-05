@@ -1,0 +1,25 @@
+<HTML>
+<head>
+  <title><%= c.name %></title>
+  <!--add code[Googlemap]-->
+  <!--script for google map??-->
+  <!--end add code-->
+</head>
+<BODY>
+<H2>Name: <%= c.name %></H2>
+<!--<p>ID: <%= c.id %></p>
+<p>Price: <%= c.price %></p>
+<p>Stock: <%= c.stock %></p>-->
+<% if (c.photo != null) { %>
+<p>
+  <img src="data:<%= c.mimetype %>;base64,<%= c.photo %>">
+<br>
+<% } %>
+
+<!--Googlemap-->
+<p>Google map: coming soon(map will be shown in here)</p>
+<!--Googlemap-->
+
+<!--<a href=/add2cart?id=<%= c.id %>>add to shopping cart</a>-->
+</BODY>
+</HTML>
