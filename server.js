@@ -114,6 +114,29 @@ app.get('/details', function(req,res) {
 
 	});
 });
+
+app.get("/gmap", function(req,res) {
+	MongoClient.connect(mongourl, function(err, db) {
+    assert.equal(err,null);
+    console.log('Connected to MongoDB\n');
+		var criteria = {'id':req.query.id};
+    findRestaurant(db,criteria,function(restaurants) {
+      db.close();
+      console.log('Disconnected MongoDB\n');
+			res.render('gmap',{name:restaurants.name,lat:restaurants.coord[0],lon:restaurants.coord[1],zoom:18});
+			res.end();
+		});
+	});
+});
+
+
+function findRestaurant(db,criteria,callback) {
+	db.collection('restaurants').findOne(criteria,function(err,result) {
+		assert.equal(err,null);
+		callback(result);
+	});
+};
+
 app.get('/new', function(req, res){
 	res.sendFile(__dirname + '/public/new.html');
 });
@@ -307,5 +330,21 @@ app.post('/findBorough', function(req, res){
 
 	})
 });
+
+app.get('/list', function(req, res){
+		MongoClient.connect(mongourl, function(err, db) {
+	assert.equal(err,null);
+	console.log('Connected to MongoDB\n');
+	db.collection('restaurants').find().toArray(function(err, result){
+			if (err) throw err
+				console.log(result);
+				res.render("list", {restaurants: result});
+		})
+	
+	db.close();
+	console.log('Disconnected MongoDB\n');
+	});
+});
+
 
 app.listen(process.env.PORT || 8099);
