@@ -21,7 +21,7 @@ var users = new Array(
 	{userid: 'guest', password: 'guest'},
 	{userid: 'demo', password: 'demo'},
 	{userid: 'demo', password: ''},
-	{userid: 'student', passwaord: ''}
+	{userid: 'student', password: ''}
 
 );
 
