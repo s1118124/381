@@ -18,7 +18,8 @@ var SECRETKEY3 = 'I want to pass COMPS381F';
 
 var users = new Array(
 	{userid: 'developer', password: 'developer'},
-	{userid: 'guest', password: 'guest'}
+	{userid: 'guest', password: 'guest'},
+	{userid: 'demo', password: 'demo'}
 );
 
 app.set('view engine','ejs');
