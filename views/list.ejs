@@ -4,6 +4,9 @@
 <H3>Showing <%= restaurants.length %> restaurants</h3>
 <!--p><a href=/shoppingcart>shopping cart</a></p-->
 <p><a href=/new>New</a></p>
+<p><a href=/findName>Search by name</a></p>
+<p><a href=/findBorough>Search by borough</a></p>
+<p><a href=/findCuisine>Search by cuisine</a></p>
 <ol>
   <% restaurants.forEach(function(r) { %>
   <ul><a href=/details?id=<%= r._id %>><%= r.name %></a></ul>

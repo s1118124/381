@@ -23,14 +23,14 @@
 
 
 <!--Googlemap-->
-<p>Google map: coming soon(map will be shown in here)</p>
+<p><a href=/gmap?lat=<%= restaurants.address.coord[0] %>&lon=<%= restaurants.address.coord[1] %>>Google Map</a></p>
+
 <!--Googlemap-->
 
-<!--<a href/add2cart?id=<%= restaurants.id %>>add to shopping cart</a>-->
 <a href=/rate>Rate</a>
 <a href=/change?id=<%= restaurants._id %>>Edit</a>
 <a href=/remove>Delete</a>
-<a href=/list>Go Back</a>
+<a href=/list?id=<%= restaurants._id %>>Go Back</a>
 
 
 </BODY>
