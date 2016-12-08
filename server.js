@@ -339,12 +339,12 @@ app.post('/rate',function(req,res) {
 	
 	res.render('details', {restaurants: r, rate: []});
 });
-
+*/
 app.get('/rate', function(req, res){
 	var score = req.body.score;
+	ratingID = req.query;
 	res.render('rate');
 });
-*/
 
 app.post('/rate', function(req, res){
 	var scores = [];
@@ -353,12 +353,14 @@ app.post('/rate', function(req, res){
 	MongoClient.connect(mongourl, function(err, db) {
 	assert.equal(err,null);
 	console.log('Connected to MongoDB\n');
-	var rated = false;
-	for (var i = 0; restaurants.score.lenght; i++) {
-		if (restaurants.score[i].username == req.session.userid) {
-			rated = true;
-		}
-	}
+	db.collection('restaurants').findOne(ratingID), function(err, result){
+				var rated = false;
+				for (var i=0; i<result.length; i++) {
+					if (result[i].username == req.session.userid) {
+						rated = true;
+					}
+				}
+
 			if (rated){
 				db.close();
 				if (err) return console.error(err);
@@ -367,9 +369,9 @@ app.post('/rate', function(req, res){
 				'<input type ="button" onclick="history.back()" value="Go back"></input>');
 			}else{
 				ratingList = {};
-				ratingList['rater'] = req.session.userid;
+				ratingList['marker'] = req.session.userid;
 				ratingList['score'] = req.body.score;
-				result.grades.push(ratingList);
+				result.score.push(ratingList);
 				result.save(function(err){
 					if (err){
 						db.close();
@@ -379,12 +381,13 @@ app.post('/rate', function(req, res){
 					}else{
 						console.log("Restaurant has been rated sucessfully!");
 						db.close();
-						res.redirect('/list');
-					}	//res.render('details', {restaurants : r, scores: scores});
+						res.render('details', {restaurants : r});
+					}	
 						console.log('Disconnected MongoDB\n');
 				});
 						
 			};
+};
 });
 });
 
