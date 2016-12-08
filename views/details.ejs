@@ -18,7 +18,12 @@
 <p>Building: <%= restaurants.address.building %></p>
 <p>Zipcode: <%= restaurants.address.zipcode %></p>
 <p>GPS: [ <%= restaurants.address.coord[0] %>,  <%=restaurants.address.coord[1] %> ]</p>
-
+Rate:<br>
+<ol>
+<% for(var i = 0; i < restaurants.length; i++) { %>
+	<li><%=restaurants.score[i].score%> <%=restaurants.score[i].marker%></li>
+<% } %>
+</ol>
 <p>Created by: <%=restaurants.username %></p>
 
 
