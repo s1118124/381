@@ -241,18 +241,47 @@ app.post('/change', function(req, res){
 
 app.get('/remove', function(req, res){
 		MongoClient.connect(mongourl, function(err, db) {
-		console.log('Connected to MongoDB\n');
-		db.collection('restaurants', {}, function(err, restaurants){
-			restaurants.remove({_id : ObjectId}, function(err, result){
-				if (err) {
-					console.log(err);
+			console.log('Connected to MongoDB\n');
+			var a_r = null;
+			db.collection('restaurants').find().toArray(function(err, result){
+				if (req.query.id != null) {
+					for (var i=0; i<result.length; i++) {
+						if (result[i]._id == req.query.id) {
+							a_r = result[i];
+							break;
+						}
+					}
+					if (result != null) {
+						console.log('You are:' + login_id);
+						console.log('right userid:' + a_r.username);
+						if (a_r != null) {
+							if (a_r.username == login_id) {
+								//res.sendFile(__dirname + '/public/change.html');
+								restaurants.remove({_id : a_r._id}, function(err, result){
+									if (err) {
+										console.log(err);
+									}
+									console.log(result);
+									db.close();
+									console.log('Disconnected from MongoDB\n');
+								})
+								//db.close();
+								//console.log('Disconnected from MongoDB\n');
+							} else {
+								res.status(500).end('You are not authorized to remove!');
+							}
+						} else {
+							res.status(500).end('userid missing!');
+						}
+					} else {
+						res.status(500).end(req.query.id + ' not found!');
+					}
+				} else {
+					res.status(500).end('id missing!');
 				}
-				console.log(result);
-				db.close();
-			})
-		})
+				res.render('list');
+			});
 		});
-		res.render('remove');
 });
 
 app.get('/findName', function(req, res){
