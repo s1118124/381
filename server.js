@@ -19,10 +19,6 @@ var SECRETKEY3 = 'I want to pass COMPS381F';
 var users = new Array(
 	{userid: 'developer', password: 'developer'},
 	{userid: 'guest', password: 'guest'},
-<<<<<<< HEAD
-=======
-	{userid: 'demo', password: 'demo'},
->>>>>>> 5eed5636cf5430030a58a251b093e618dcaa6c7e
 	{userid: 'demo', password: ''},
 	{userid: 'student', password: ''}
 
@@ -100,21 +96,21 @@ app.get('/details', function(req,res) {
 		assert.equal(err,null);
 		console.log('Connected to MongoDB\n');
 		db.collection('restaurants').find().toArray(function(err, result){
-			if (req.query.id != null) {
+			//if (req.query.id != null) {
 				for (var i=0; i<result.length; i++) {
 					if (result[i]._id == req.query.id) {
 						var r = result[i];
 						break;
 					}
 				}
-				if (result != null) {
+				//if (result != null) {
 					res.render('details', {restaurants: r, username: login_id});
-				} else {
-					res.status(500).end(req.query.id + ' not found!');
-				}
-			} else {
-				res.status(500).end('id missing!');
-			}
+				//} else {
+				//	res.status(500).end(req.query.id + ' not found!');
+				//}
+			//} else {
+				//res.status(500).end('id missing!');
+			//}
 		});
 		db.close();
 		console.log('Disconnected MongoDB\n');
@@ -136,8 +132,8 @@ app.get('/new', function(req, res){
 //add code for create new
 //may need to fit the request as: POST /api/create
 app.post('/create', function(req, res){
-        //do sth to create
-    var mimetype = null; //added at 2353
+    //do sth to create
+    //var mimetype = null; //added at 2353
 	var r = {};  // new restaurant to be inserted
 	r['address'] = {};
 	r.address.street = (req.body.street != null) ? req.body.street : null;
@@ -149,9 +145,9 @@ app.post('/create', function(req, res){
 	r['borough'] = (req.body.borough != null) ? req.body.borough : null;
 	r['cuisine'] = (req.body.cuisine != null) ? req.body.cuisine : null;
 	r['name'] = (req.body.name != null) ? req.body.name : null;
-	r['photo'] = {};
-	r.photo.contentType = req.files.photo.minetype;
-	r.photo.data = new Buffer((req.files.photo.data).toString('base64'));
+	r['photo'] = new Buffer((req.files.photo.data).toString('base64'));
+	r.photo.contentType = req.files.photo.mimetype;
+	//r.photo.data = new Buffer((req.files.photo.data).toString('base64'));
 	r['username'] = req.session.userid;
 	r['score'] = req.body.score;
 
