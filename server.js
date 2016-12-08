@@ -19,6 +19,10 @@ var SECRETKEY3 = 'I want to pass COMPS381F';
 var users = new Array(
 	{userid: 'developer', password: 'developer'},
 	{userid: 'guest', password: 'guest'},
+<<<<<<< HEAD
+=======
+	{userid: 'demo', password: 'demo'},
+>>>>>>> 5eed5636cf5430030a58a251b093e618dcaa6c7e
 	{userid: 'demo', password: ''},
 	{userid: 'student', password: ''}
 
