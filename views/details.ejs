@@ -9,7 +9,7 @@
 <H2><%= restaurants.name %></H2>
 <% if (restaurants.photo != null) { %>
 <p>
-  <img src="data:<%= restaurants.mimetype %>;base64,<%= restaurants.photo %>">
+  <img src="data:<%= restaurants.photo.contentType %>;base64,<%= restaurants.photo %>">
 <br>
 <% } %>
 <p>Name: <%= restaurants.name %></p>
@@ -18,16 +18,36 @@
 <p>Building: <%= restaurants.address.building %></p>
 <p>Zipcode: <%= restaurants.address.zipcode %></p>
 <p>GPS: [ <%= restaurants.address.coord[0] %>,  <%=restaurants.address.coord[1] %> ]</p>
-<p>Rating: <ol><li> <%=restaurants.rate %></li></ol></p>
+
 <p>Created by: <%=restaurants.username %></p>
 
 
 <!--Googlemap-->
-<p><a href=/gmap?lat=<%= restaurants.address.coord[0] %>&lon=<%= restaurants.address.coord[1] %>>Google Map</a></p>
+<link rel="stylesheet" type="text/css" href="layout.css">
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true&key=AIzaSyBm_Oka5-CVkjrO3iNUsn0K5rINbqNsrJU"></script>
+        <script type="text/javascript">
+            var loadMap = function() 
+            {
+				var myLatLng = {lat: <%=restaurants.address.coord[1]%>, lng: <%=restaurants.address.coord[0]%>};
+                var map = new google.maps.Map(document.getElementById("map"),{
+				      zoom: 15,	
+				      center: myLatLng
+				}); 
+				var map = new google.maps.Marker({
+					position: myLatLng,
+					map: map,
+
+				});
+            };
+            window.onload= loadMap;
+        </script>
+        	<aside>
+        	<div id="map" style="width:500px;height:500px;">
+			</aside>
 
 <!--Googlemap-->
 
-<a href=/rate>Rate</a>
+<a href=/rate?id=<%= restaurants._id %>>Rate</a>
 <a href=/change?id=<%= restaurants._id %>>Edit</a>
 <a href=/remove>Delete</a>
 <a href=/list?id=<%= restaurants._id %>>Go Back</a>

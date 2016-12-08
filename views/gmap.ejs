@@ -1,22 +1,22 @@
 <html>
 	<head>
 		<title>Google Map of the restaurant</title>
+
 		<script type="text/javascript"
-			src="http://maps.google.com/maps/api/js?sensor=true"></script>
+			src="http://maps.google.com/maps/api/js?sensor=true&key=AIzaSyAZQqRP3hp5x4hvOUhHr307Jl74Va0hbe0"></script>
 		<script type="text/javascript">
 		
 		var loadMap = function(){
 			
-			var myLatLng = {lat: <%=restaurants.coord[0]%>, lng: <%=restaurants.address.coord[1]%>};
+			var myLatLng = {lat: <%=restaurants.address.coord[0]%>, lng: <%=restaurants.address.coord[1]%>};
 			var map = new google.maps.Map(document.getElementById("map"),{
-				zoom: <%=zoom%>,
+				zoom: 20,
 				center: myLatLng
 			});
 			
 			var map = new google.maps.Marker({
 			position: myLatLng,
 			map: map,
-			title: title
 			});
 		};
 			
