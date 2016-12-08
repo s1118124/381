@@ -47,14 +47,12 @@ app.get('/login',function(req,res) {
 	res.sendFile(__dirname + '/public/login.html');
 });
 
-var login_id = null;
 app.post('/login',function(req,res) {
 	for (var i=0; i<users.length; i++) {
 		if (users[i].userid == req.body.userid &&
 		    users[i].password == req.body.password) {
 			req.session.authenticated = true;
 			req.session.userid = users[i].userid;
-			login_id = req.session.userid;
 		}
 	}
 	res.redirect('/');
@@ -62,7 +60,6 @@ app.post('/login',function(req,res) {
 
 app.get('/logout',function(req,res) {
 	req.session = null;  //make session has no info
-	login_id = null;
 	res.redirect('/');
 });
 
@@ -104,7 +101,7 @@ app.get('/details', function(req,res) {
 					}
 				}
 				//if (result != null) {
-					res.render('details', {restaurants: r, username: login_id});
+					res.render('details', {restaurants: r, username: req.session.userid});
 				//} else {
 				//	res.status(500).end(req.query.id + ' not found!');
 				//}
@@ -185,10 +182,10 @@ app.get('/change', function(req, res){
 					}
 				}
 				if (result != null) {
-					console.log('You are:' + login_id);
+					console.log('You are:' + req.session.userid);
 					console.log('right userid:' + a_r.username);
 					if (a_r != null) {
-						if (a_r.username == login_id) {
+						if (a_r.username == req.session.userid) {
 							res.sendFile(__dirname + '/public/change.html');
 							db.close();
 							console.log('Disconnected from MongoDB\n');
@@ -212,7 +209,6 @@ app.get('/change', function(req, res){
 });
 
 app.post('/change', function(req, res){
-	login_id = req.session.userid;
 	var mimetype = null; //added at 2353
 	var r = {};  
 	r['address'] = {};
@@ -233,7 +229,7 @@ app.post('/change', function(req, res){
 	MongoClient.connect(mongourl, function(err, db) {
 		console.log('Connected to MongoDB\n');
 		db.collection('restaurants').save(
-			{_id : ObjectId, name : r.name, cuisine : r.cuisine, address : r.address, mimetype : r.mimetype, photo : r.photo, username : login_id});
+			{_id : ObjectId, name : r.name, cuisine : r.cuisine, address : r.address, mimetype : r.mimetype, photo : r.photo, username : req.session.userid});
 		console.log('updated\n');
 		db.close();
 		console.log('Disconnected from MongoDB\n');
@@ -255,10 +251,10 @@ app.get('/remove', function(req, res){
 						}
 					}
 					if (result != null) {
-						console.log('You are:' + login_id);
+						console.log('You are:' + req.session.userid);
 						console.log('right userid:' + a_r.username);
 						if (a_r != null) {
-							if (a_r.username == login_id) {
+							if (a_r.username == req.session.userid) {
 								//res.sendFile(__dirname + '/public/change.html');
 								restaurants.remove({_id : a_r._id, name : a_r.name}, function(err, result){
 									if (err) {
