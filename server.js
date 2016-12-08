@@ -260,7 +260,7 @@ app.get('/remove', function(req, res){
 						if (a_r != null) {
 							if (a_r.username == login_id) {
 								//res.sendFile(__dirname + '/public/change.html');
-								restaurants.remove({_id : a_r._id}, function(err, result){
+								restaurants.remove({_id : a_r._id, name : a_r.name}, function(err, result){
 									if (err) {
 										console.log(err);
 									}
