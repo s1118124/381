@@ -225,10 +225,10 @@ app.post('/change', function(req, res){
 	r['borough'] = (req.body.borough != null) ? req.body.borough : null;
 	r['cuisine'] = (req.body.cuisine != null) ? req.body.cuisine : null;
 	r['name'] = (req.body.name != null) ? req.body.name : null;
-	r['photo'] = {};
-	r.photo.mimetype = (req.files.mimetype != null) ? req.files.mimetype : null;
-	r.photo.data = (req.files.data != null) ? req.files.data : null;
-	r['username'] = (login_id != null) ? login_id : null; 
+	r['photo'] = new Buffer((req.files.photo.data).toString('base64'));
+	r.photo.contentType = req.files.photo.mimetype;
+	//r.photo.data = new Buffer((req.files.photo.data).toString('base64'));
+	r['username'] = req.session.userid;	
 
 	MongoClient.connect(mongourl, function(err, db) {
 		console.log('Connected to MongoDB\n');
