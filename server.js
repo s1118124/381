@@ -19,8 +19,8 @@ var SECRETKEY3 = 'I want to pass COMPS381F';
 var users = new Array(
 	{userid: 'developer', password: 'developer'},
 	{userid: 'guest', password: 'guest'},
-	{userid: 'demo', password: 'demo'},
-	{userid: 'demo', password: ''}
+	{userid: 'demo', password: ''},
+	{userid: 'student', password: ''}
 
 );
 
@@ -118,21 +118,6 @@ app.get('/details', function(req,res) {
 	});
 });
 
-app.get("/gmap", function(req,res) {
-	MongoClient.connect(mongourl, function(err, db) {
-    assert.equal(err,null);
-    console.log('Connected to MongoDB\n');
-		var criteria = {'id':req.query.id};
-    findRestaurant(db,criteria,function(restaurants) {
-      db.close();
-      console.log('Disconnected MongoDB\n');
-			res.render('gmap',{name:restaurants.name,lat:restaurants.coord[0],lon:restaurants.coord[1],zoom:18});
-			res.end();
-		});
-	});
-});
-
-
 function findRestaurant(db,criteria,callback) {
 	db.collection('restaurants').findOne(criteria,function(err,result) {
 		assert.equal(err,null);
@@ -161,13 +146,18 @@ app.post('/create', function(req, res){
 	r['cuisine'] = (req.body.cuisine != null) ? req.body.cuisine : null;
 	r['name'] = (req.body.name != null) ? req.body.name : null;
 	r['photo'] = {};
-	r.photo.mimetype = (req.files.mimetype != null) ? req.files.mimetype : null;
-	r.photo.data = (req.files.data != null) ? req.files.data : null;
+	r.photo.contentType = req.files.photo.minetype;
+	r.photo.data = new Buffer((req.files.photo.data).toString('base64'));
 	r['username'] = req.session.userid;
+	r['score'] = req.body.score;
 
 	MongoClient.connect(mongourl, function(err, db) {
 		assert.equal(err,null);
 		console.log('Connected to MongoDB\n');
+		if (r.photo.contentType = 'application/octet-stream') {
+			console.log(r.photo.contentType);
+		}
+
 		db.collection('restaurants').insertOne(r,
 			function(err,result) {
 				assert.equal(err,null);
@@ -247,15 +237,6 @@ app.post('/change', function(req, res){
 		console.log("update() was successful _id = ");
 		res.render('details', {restaurants: r});
 	});
-});
-
-app.get('/rate', function(req, res){
-	res.sendFile(__dirname + '/public/rate.html');
-});
-
-app.post('/rate',function(req,res) {
-	
-	res.render('details', {restaurants: r, rate: []});
 });
 
 app.get('/remove', function(req, res){
@@ -348,6 +329,67 @@ app.get('/list', function(req, res){
 	console.log('Disconnected MongoDB\n');
 	});
 });
+
+/*
+app.get('/rate', function(req, res){
+	res.sendFile(__dirname + '/public/rate.html');
+});
+
+app.post('/rate',function(req,res) {
+	
+	res.render('details', {restaurants: r, rate: []});
+});
+
+app.get('/rate', function(req, res){
+	var score = req.body.score;
+	res.render('rate');
+});
+*/
+
+app.post('/rate', function(req, res){
+	var scores = [];
+	var score = req.body.score;
+	console.log(score);
+	MongoClient.connect(mongourl, function(err, db) {
+	assert.equal(err,null);
+	console.log('Connected to MongoDB\n');
+	var rated = false;
+	for (var i = 0; restaurants.score.lenght; i++) {
+		if (restaurants.score[i].username == req.session.userid) {
+			rated = true;
+		}
+	}
+			if (rated){
+				db.close();
+				if (err) return console.error(err);
+				res.send('<h2>Access denied!</h2><br>'+
+				'<p>You have rated this restaurant already!</p><br>' +
+				'<input type ="button" onclick="history.back()" value="Go back"></input>');
+			}else{
+				ratingList = {};
+				ratingList['rater'] = req.session.userid;
+				ratingList['score'] = req.body.score;
+				result.grades.push(ratingList);
+				result.save(function(err){
+					if (err){
+						db.close();
+						res.send('<h2>Access denied!</h2><br>'+
+						'<p>The rating range is 1 - 10!</p><br>' +
+						'<input type ="button" onclick="history.back()" value="Go back"></input>');
+					}else{
+						console.log("Restaurant has been rated sucessfully!");
+						db.close();
+						res.redirect('/list');
+					}	//res.render('details', {restaurants : r, scores: scores});
+						console.log('Disconnected MongoDB\n');
+				});
+						
+			};
+});
+});
+
+
+
 
 
 app.listen(process.env.PORT || 8099);
