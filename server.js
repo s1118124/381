@@ -193,7 +193,10 @@ app.get('/change', function(req, res){
 							db.close();
 							console.log('Disconnected from MongoDB\n');
 						} else {
-							res.status(500).end('You are not authorized to edit!');
+							//res.status(500).end('You are not authorized to edit!');
+							res.send('<h2>Access denied!</h2><br>'+
+							'<p>You have no rights to access this page!</p><br>' +
+							'<input type ="button" onclick="history.back()" value="Go back"></input>');
 						}
 					} else {
 						res.status(500).end('userid missing!');
@@ -268,7 +271,10 @@ app.get('/remove', function(req, res){
 								//db.close();
 								//console.log('Disconnected from MongoDB\n');
 							} else {
-								res.status(500).end('You are not authorized to remove!');
+								//res.status(500).end('You are not authorized to remove!');
+								res.send('<h2>Access denied!</h2><br>'+
+								'<p>You have no rights to access this page!</p><br>' +
+								'<input type ="button" onclick="history.back()" value="Go back"></input>');
 							}
 						} else {
 							res.status(500).end('userid missing!');
